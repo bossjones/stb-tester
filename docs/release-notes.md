@@ -22,6 +22,10 @@ UNRELEASED
 
 ##### Breaking changes since v26
 
+* The definition of equality for `stbt.MatchResult` objects has changed (see
+  below for details). This should only affect you if you were storing
+  `MatchResult` objects in a dict or a set.
+
 ##### New features
 
 * Python API: `stbt.Region` has the following new methods: `above`, `below`,
@@ -31,6 +35,13 @@ UNRELEASED
 * Python API: `stbt.wait_until` has a new parameter `consecutive_secs` to wait
   for the return value to stabilise (for example to wait for the position of a
   `MatchResult` to stabilise).
+
+* Python API: `stbt.MatchResult` objects are now considered equal if they
+  correspond to the same reference image, matching (or not matching) at the
+  same position. That is, two `MatchResult` objects corresponding to different
+  video-frames (with different timestamps) can now be considered equal. This
+  makes it more convenient to use `stbt.match` with `wait_until`'s
+  `consecutive_secs` parameter.
 
 * New remote-control type "hdmi-cec". With the help of a USB-CEC adapter such
   as <https://www.pulse-eight.com/p/104/usb-hdmi-cec-adapter> this allows
