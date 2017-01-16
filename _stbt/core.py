@@ -1138,7 +1138,7 @@ def save_frame(image, filename):
     cv2.imwrite(filename, image)
 
 
-def wait_until(callable_, timeout_secs=10, interval_secs=0, consecutive_secs=0):
+def wait_until(callable_, timeout_secs=10, interval_secs=0, stable_secs=0):
     """Wait until a condition becomes true, or until a timeout.
 
     ``callable_`` is any python callable, such as a function or a lambda
@@ -1147,12 +1147,12 @@ def wait_until(callable_, timeout_secs=10, interval_secs=0, consecutive_secs=0):
     truthy value) or until ``timeout_secs`` seconds have passed. In both cases,
     ``wait_until`` returns the value that ``callable_`` returns.
 
-    If ``consecutive_secs`` is specified then ``wait_until`` returns:
+    If ``stable_secs`` is specified then ``wait_until`` returns:
 
     * ``callable_``'s return value if it was truthy and remained the same
-      (as determined by ``==``) for ``consecutive_secs`` seconds.
+      (as determined by ``==``) for ``stable_secs`` seconds.
     * ``None`` if ``callable_``'s return value was truthy but didn't stay
-      the same for ``consecutive_secs`` before we reached ``timeout_secs``.
+      the same for ``stable_secs`` before we reached ``timeout_secs``.
     * ``callable_``'s last return value if it was falsey when we reached
       ``timeout_secs``.
 
@@ -1197,8 +1197,8 @@ def wait_until(callable_, timeout_secs=10, interval_secs=0, consecutive_secs=0):
 
     We hope to solve both of the above drawbacks at some point in the future.
 
-    ``wait_until`` was added in stb-tester v22. The ``consecutive_secs``
-    parameter was added in v27.
+    ``wait_until`` was added in stb-tester v22. The ``stable_secs`` parameter
+    was added in v27.
     """
     import time
 
@@ -1219,12 +1219,12 @@ def wait_until(callable_, timeout_secs=10, interval_secs=0, consecutive_secs=0):
 
         stable_duration = t - stable_since
 
-        if value and stable_duration >= consecutive_secs:
+        if value and stable_duration >= stable_secs:
             return value
 
         if t > expiry_time:
             debug("wait_until timed out: %s" % _callable_description(callable_))
-            if consecutive_secs == 0:
+            if stable_secs == 0:
                 return value
             else:
                 return None
