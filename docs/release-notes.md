@@ -26,6 +26,8 @@ UNRELEASED
 
 ##### Minor fixes and packaging fixes
 
+* `stbt lint`: Catch & ignore pylint inference exceptions.
+
 ##### Maintainer-visible changes
 
 
